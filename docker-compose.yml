@@ -1,0 +1,28 @@
+# docker-compose.yml
+version: '3'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskdb
+    ports:
+      - "5432:5432"
+
+  web:
+    build: ./flask-backend
+    ports:
+      - "5001:5000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/taskdb
+
+  # Web Frontend
+  web-frontend:
+    build: ./web-frontend  # Folder where Dockerfile for web is located
+    ports:
+      - "8080:80"          # Expose port 80 from Nginx to port 8080 on the host
+    depends_on:
+      - web     # Ensure Flask backend is running before web
