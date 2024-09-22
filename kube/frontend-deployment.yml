@@ -136,18 +136,3 @@ data:
         </script>
     </body>
     </html>
-
----
-# frontend-service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: web-frontend-service
-spec:
-  type: NodePort
-  selector:
-    app: web-frontend
-  ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30002  # You can modify the node port as needed
