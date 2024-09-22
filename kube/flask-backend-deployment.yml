@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-backend
-        image: your-backend-image
+        image: shpeely.cr.cloud.ru/flask-backend:latest
         ports:
         - containerPort: 5000
         env:
@@ -29,5 +29,3 @@ spec:
           value: "postgres-service"
         - name: POSTGRES_PORT
           value: "5432"
-
-

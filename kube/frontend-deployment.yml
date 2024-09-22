@@ -15,13 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: shpeely.cr.cloud.ru/flask-frontend:latest
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: frontend-files
-          mountPath: /usr/share/nginx/html
-      volumes:
-      - name: frontend-files
-        configMap:
-          name: frontend-config
+        
