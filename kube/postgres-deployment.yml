@@ -26,10 +26,11 @@ spec:
         ports:
         - containerPort: 5432
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data/
+        - mountPath: /var/lib/postgresql/data
           name: postgres-pv
           subPath: data
       volumes:
       - name: postgres-pv
         persistentVolumeClaim:
           claimName: cloudru-pvc
+

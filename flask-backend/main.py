@@ -8,8 +8,16 @@ app = Flask(__name__)
 CORS(app)
 
 # PostgreSQL database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:password@db:5432/taskdb')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Fetch connection details from environment variables
+db_host = os.getenv('POSTGRES_HOST', 'localhost')
+db_port = os.getenv('POSTGRES_PORT', '5432')
+db_name = os.getenv('POSTGRES_DB', 'taskdb')
+db_user = os.getenv('POSTGRES_USER', 'taskuser')
+db_password = os.getenv('POSTGRES_PASSWORD', 'taskpassword')
+db_connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_connection_string
 db = SQLAlchemy(app)
 
 # Task Model
