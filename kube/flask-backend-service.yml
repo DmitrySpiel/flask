@@ -1,13 +1,11 @@
-# flask-backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: flask-backend-service
 spec:
-  type: NodePort
+  type: ClusterIP  # Ensure this is set for internal communication
+  ports:
+    - port: 5000
+      targetPort: 5000
   selector:
     app: flask-backend
-  ports:
-  - port: 5000
-    targetPort: 5000
-    nodePort: 30001  # You can modify the node port as needed
