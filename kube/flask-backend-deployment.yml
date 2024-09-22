@@ -1,33 +1,46 @@
+# flask-backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app
+  name: flask-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-app
+      app: flask-backend
   template:
     metadata:
       labels:
-        app: flask-app
+        app: flask-backend
     spec:
       containers:
-      - name: flask-app
-        image: your-dockerhub-username/flask-app:latest
+      - name: flask-backend
+        image: your-backend-image
         ports:
         - containerPort: 5000
         env:
-        - name: DATABASE_URL
-          value: postgresql://postgres:password@postgres:5432/taskdb
+        - name: POSTGRES_DB
+          value: "taskdb"
+        - name: POSTGRES_USER
+          value: "taskuser"
+        - name: POSTGRES_PASSWORD
+          value: "taskpassword"
+        - name: POSTGRES_HOST
+          value: "postgres-service"
+        - name: POSTGRES_PORT
+          value: "5432"
+
 ---
+# flask-backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-app
+  name: flask-backend-service
 spec:
+  type: NodePort
+  selector:
+    app: flask-backend
   ports:
   - port: 5000
-  selector:
-    app: flask-app
-  type: LoadBalancer
+    targetPort: 5000
+    nodePort: 30001  # You can modify the node port as needed

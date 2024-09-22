@@ -1,3 +1,4 @@
+# postgres-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,20 +15,34 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: postgres:13  # Use the appropriate version of Postgres
+        image: postgres:13
+        env:
+        - name: POSTGRES_DB
+          value: "taskdb"
+        - name: POSTGRES_USER
+          value: "taskuser"
+        - name: POSTGRES_PASSWORD
+          value: "taskpassword"
         ports:
         - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          value: myuser
-        - name: POSTGRES_PASSWORD
-          value: mypassword
-        - name: POSTGRES_DB
-          value: mydatabase
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data  # Path where Postgres stores data
-          name: postgres-storage
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-pv
       volumes:
-      - name: postgres-storage
+      - name: postgres-pv
         persistentVolumeClaim:
-          claimName: cloudru-pvc  # The PVC that claims the PV
+          claimName: postgres-pvc
+
+---
+# postgres-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
